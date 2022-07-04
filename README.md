@@ -5,25 +5,25 @@ git clone https://github.com/vianey-jean/Jean_RABEMANALINA_P09_04-07-2022.git
 Pour le Back:
 Allez au repo cloné :
 
-cd Billed-app-FR-Back
+$cd Billed-app-FR-Back
 
-npm install
+$npm install
 
-npm run run:dev
+$npm run run:dev
 
 
 Pour Le Front:
 Allez au repo cloné :
 
-cd Billed-app-FR-Front
+$cd Billed-app-FR-Front
 
-npm install
+$npm install
 
 Installez live-server pour lancer un serveur local :
-npm install -g live-server
+$npm install -g live-server
 
 Lancez l'application :
-live-server
+$live-server
 
 Puis allez à l'adresse : http://127.0.0.1:8080/
 
@@ -36,7 +36,7 @@ mot de passe : employee
 
 Comment lancer tous les tests en local avec Jest ?
 
-npm run test
+$npm run test
 
 Comment lancer un seul test ?
 
