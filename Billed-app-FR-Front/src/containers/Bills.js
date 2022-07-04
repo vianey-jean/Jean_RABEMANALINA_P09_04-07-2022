@@ -27,45 +27,45 @@ export default class {
     $('#modaleFile').modal('show');
   };
 
-    /**
-     * Pas besoin de couvrir cette fonction par des tests
-     */
+  /**
+   * Pas besoin de couvrir cette fonction par des tests
+   */
   getBills = () => {
     if (this.store) {
       return this.store
-      .bills()
-      .list()
-      .then(snapshot => {
-        const bills = snapshot
-        /**
-         * Bug 1: On trie dans l'order par date
-         */
-          .sort((a,b) => (a.date < b.date) ? 1: -1)
-          /**
-           * Fin du Correction du Bug
-           */
-          .map(doc => {
-            try {
-              // console.log(date);
-              return {
-                ...doc,
-                date: formatDate(doc.date),
-                status: formatStatus(doc.status)
+        .bills()
+        .list()
+        .then(snapshot => {
+          const bills = snapshot
+            /**
+             * Bug 1: On trie dans l'order par date
+             */
+            .sort((a, b) => (a.date < b.date) ? 1 : -1)
+            /**
+             * Fin du Correction du Bug
+             */
+            .map(doc => {
+              try {
+                // console.log(date);
+                return {
+                  ...doc,
+                  date: formatDate(doc.date),
+                  status: formatStatus(doc.status)
+                }
+              } catch (e) {
+                // if for some reason, corrupted data was introduced, we manage here failing formatDate function
+                // log the error and return unformatted date in that case
+                console.log(e, 'for', doc);
+                return {
+                  ...doc,
+                  date: doc.date,
+                  status: formatStatus(doc.status)
+                }
               }
-            } catch(e) {
-              // if for some reason, corrupted data was introduced, we manage here failing formatDate function
-              // log the error and return unformatted date in that case
-              console.log(e,'for',doc);
-              return {
-                ...doc,
-                date: doc.date,
-                status: formatStatus(doc.status)
-              }
-            }
-          })
+            })
           console.log('length', bills.length);
-        return bills;
-      });
+          return bills;
+        });
     }
   };
 }
