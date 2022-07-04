@@ -156,17 +156,16 @@ export default class {
      */
      bills.forEach((bill) => {
       $(`#open-bill${bill.id}`).click((e) => {
-        // [BUG HUNT "Dashboard" CORRECTION] - Stop event propagation for element
+        /*
+        *--------------------BUG------------------------
+        *CORRECTION "Tableau de bord" HUNT - Arrête la propagation de l'événement pour l'élément
+        */
         e.stopImmediatePropagation();
-        // END [BUG HUNT "Dashboard" CORRECTION]
+        /*------------------------Fin Bug------------------------ */
         this.handleEditTicket(e, bill, bills);
       });
     });
   }
-
-
-
-  
 
   getBillsAllUsers = () => {
     if (this.store) {
