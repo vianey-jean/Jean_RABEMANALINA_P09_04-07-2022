@@ -1,9 +1,9 @@
-import { formatDate } from '../app/format.js'
-import DashboardFormUI from '../views/DashboardFormUI.js'
-import BigBilledIcon from '../assets/svg/big_billed.js'
-import { ROUTES_PATH } from '../constants/routes.js'
-import USERS_TEST from '../constants/usersTest.js'
-import Logout from "./Logout.js"
+import { formatDate } from "../app/format.js";
+import DashboardFormUI from "../views/DashboardFormUI.js";
+import BigBilledIcon from "../assets/svg/big_billed.js";
+import { ROUTES_PATH } from "../constants/routes.js";
+import USERS_TEST from "../constants/usersTest.js";
+import Logout from "./Logout.js";
 
 export const filteredBills = (data, status) => {
   return (data && data.length) ?
@@ -26,6 +26,7 @@ export const filteredBills = (data, status) => {
       return selectCondition
     }) : []
 }
+
 
 export const card = (bill) => {
   const firstAndLastNames = bill.email.split('@')[0]
@@ -50,22 +51,22 @@ export const card = (bill) => {
       </div>
     </div>
   `)
-}
+};
 
 export const cards = (bills) => {
-  return bills && bills.length ? bills.map(bill => card(bill)).join("") : ""
-}
+  return bills && bills.length ? bills.map((bill) => card(bill)).join("") : "";
+};
 
 export const getStatus = (index) => {
   switch (index) {
     case 1:
-      return "pending"
+      return "pending";
     case 2:
-      return "accepted"
+      return "accepted";
     case 3:
-      return "refused"
+      return "refused";
   }
-}
+};
 
 export default class {
   constructor({ document, onNavigate, store, bills, localStorage }) {
@@ -86,103 +87,116 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
-    if (this.counter === undefined || this.id !== bill.id) this.counter = 0
-    if (this.id === undefined || this.id !== bill.id) this.id = bill.id
+    if (this.counter === undefined || this.id !== bill.id) this.counter = 0;
+    if (this.id === undefined || this.id !== bill.id) this.id = bill.id;
     if (this.counter % 2 === 0) {
-      bills.forEach(b => {
-        $(`#open-bill${b.id}`).css({ background: '#0D5AE5' })
-      })
-      $(`#open-bill${bill.id}`).css({ background: '#2A2B35' })
-      $('.dashboard-right-container div').html(DashboardFormUI(bill))
-      $('.vertical-navbar').css({ height: '150vh' })
-      this.counter ++
+      bills.forEach((bill) => {
+        $(`#open-bill${bill.id}`).css({ background: "#0D5AE5" });
+      });
+      $(`#open-bill${bill.id}`).css({ background: "#2A2B35" });
+      $(".dashboard-right-container div").html(DashboardFormUI(bill));
+      $(".vertical-navbar").css({ height: "150vh" });
+      this.counter++;
     } else {
-      $(`#open-bill${bill.id}`).css({ background: '#0D5AE5' })
+      $(`#open-bill${bill.id}`).css({ background: "#0D5AE5" });
 
-      $('.dashboard-right-container div').html(`
+      $(".dashboard-right-container div").html(`
         <div id="big-billed-icon" data-testid="big-billed-icon"> ${BigBilledIcon} </div>
-      `)
-      $('.vertical-navbar').css({ height: '120vh' })
-      this.counter ++
+      `);
+      $(".vertical-navbar").css({ height: "120vh" });
+      this.counter++;
     }
-    $('#icon-eye-d').click(this.handleClickIconEye)
-    $('#btn-accept-bill').click((e) => this.handleAcceptSubmit(e, bill))
-    $('#btn-refuse-bill').click((e) => this.handleRefuseSubmit(e, bill))
+    $("#icon-eye-d").click(this.handleClickIconEye);
+    $("#btn-accept-bill").click((e) => this.handleAcceptSubmit(e, bill));
+    $("#btn-refuse-bill").click((e) => this.handleRefuseSubmit(e, bill));
   }
 
   handleAcceptSubmit = (e, bill) => {
     const newBill = {
       ...bill,
-      status: 'accepted',
-      commentAdmin: $('#commentary2').val()
-    }
-    this.updateBill(newBill)
-    this.onNavigate(ROUTES_PATH['Dashboard'])
-  }
+      status: "accepted",
+      commentAdmin: $("#commentary2").val(),
+    };
+    this.updateBill(newBill);
+    this.onNavigate(ROUTES_PATH["Dashboard"]);
+  };
 
   handleRefuseSubmit = (e, bill) => {
     const newBill = {
       ...bill,
-      status: 'refused',
-      commentAdmin: $('#commentary2').val()
-    }
-    this.updateBill(newBill)
-    this.onNavigate(ROUTES_PATH['Dashboard'])
-  }
+      status: "refused",
+      commentAdmin: $("#commentary2").val(),
+    };
+    this.updateBill(newBill);
+    this.onNavigate(ROUTES_PATH["Dashboard"]);
+  };
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
-    if (this.index === undefined || this.index !== index) this.index = index
+    if (this.counter === undefined || this.index !== index) this.counter = 0;
+    //console.log(this.counter, this.index);
+    if (this.index === undefined || this.index !== index) this.index = index;
+    //console.log(this.counter, this.index);
     if (this.counter % 2 === 0) {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter ++
+      //si une liste est ouverte
+      //console.log(this.counter, this.index);
+      $(`#arrow-icon${this.index}`).css({ transform: "rotate(0deg)" });
+      $(`#status-bills-container${this.index}`).html(
+        cards(filteredBills(bills, getStatus(this.index)))
+      );
+      this.counter++;
     } else {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html("")
-      this.counter ++
+      $(`#arrow-icon${this.index}`).css({ transform: "rotate(90deg)" });
+      $(`#status-bills-container${this.index}`).html("");
+      this.counter++;
     }
 
-    bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    })
-
-    return bills
-
+    /**---------bug 4----------------------------------------------
+     * ajout lignes 179-180 si l'élément n'a pas de listener on l'ajoute
+     * ------------------------------------------------------------
+     */
+     bills.forEach((bill) => {
+      $(`#open-bill${bill.id}`).click((e) => {
+        // [BUG HUNT "Dashboard" CORRECTION] - Stop event propagation for element
+        e.stopImmediatePropagation();
+        // END [BUG HUNT "Dashboard" CORRECTION]
+        this.handleEditTicket(e, bill, bills);
+      });
+    });
   }
+
+
+
+  
 
   getBillsAllUsers = () => {
     if (this.store) {
       return this.store
-      .bills()
-      .list()
-      .then(snapshot => {
-        const bills = snapshot
-        .map(doc => ({
-          id: doc.id,
-          ...doc,
-          date: doc.date,
-          status: doc.status
-        }))
-        return bills
-      })
-      .catch(error => {
-        throw error;
-      })
+        .bills()
+        .list()
+        .then((snapshot) => {
+          const bills = snapshot.map((doc) => ({
+            id: doc.id,
+            ...doc,
+            date: doc.date,
+            status: doc.status,
+          }));
+          return bills;
+        })
+        .catch((error) => {
+          throw error;
+        });
     }
-  }
+  };
 
   // not need to cover this function by tests
   /* istanbul ignore next */
   updateBill = (bill) => {
     if (this.store) {
-    return this.store
-      .bills()
-      .update({data: JSON.stringify(bill), selector: bill.id})
-      .then(bill => bill)
-      .catch(console.log)
+      return this.store
+        .bills()
+        .update({ data: JSON.stringify(bill), selector: bill.id })
+        .then((bill) => bill)
+        .catch(console.log);
     }
-  }
+  };
 }
