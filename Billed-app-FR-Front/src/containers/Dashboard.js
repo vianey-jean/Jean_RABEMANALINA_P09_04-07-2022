@@ -139,15 +139,15 @@ export default class {
     if (this.counter % 2 === 0) {
       //si une liste est ouverte
       //console.log(this.counter, this.index);
-      $(`#arrow-icon${this.index}`).css({ transform: "rotate(0deg)" });
+      $(`#arrow-icon${this.index}`).css({ transform: "rotate(0deg)" })
       $(`#status-bills-container${this.index}`).html(
         cards(filteredBills(bills, getStatus(this.index)))
-      );
-      this.counter++;
+      )
+      this.counter++
     } else {
-      $(`#arrow-icon${this.index}`).css({ transform: "rotate(90deg)" });
-      $(`#status-bills-container${this.index}`).html("");
-      this.counter++;
+      $(`#arrow-icon${this.index}`).css({ transform: "rotate(90deg)" })
+      $(`#status-bills-container${this.index}`).html("")
+      this.counter++
     }
 
     /**---------bug 4----------------------------------------------
@@ -156,16 +156,17 @@ export default class {
      */
      bills.forEach((bill) => {
       $(`#open-bill${bill.id}`).click((e) => {
-        /*
-        *--------------------BUG------------------------
-        *CORRECTION "Tableau de bord" HUNT - Arrête la propagation de l'événement pour l'élément
-        */
+        // [BUG HUNT "Dashboard" CORRECTION] - Stop event propagation for element
         e.stopImmediatePropagation();
-        /*------------------------Fin Bug------------------------ */
+        // END [BUG HUNT "Dashboard" CORRECTION]
         this.handleEditTicket(e, bill, bills);
       });
     });
   }
+
+
+
+  
 
   getBillsAllUsers = () => {
     if (this.store) {

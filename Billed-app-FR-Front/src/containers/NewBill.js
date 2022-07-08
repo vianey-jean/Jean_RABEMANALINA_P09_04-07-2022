@@ -47,7 +47,7 @@ export default class NewBill {
     ) {
       errorMessage.classList.add("hidden");
       /**
-       * ---------------------Fin Bug-------------------------------
+       * ----------------------------------------------------
        */
       this.store
         .bills()
@@ -73,7 +73,6 @@ export default class NewBill {
       e.target.value = "";
       errorMessage.classList.remove("hidden");
     }
-    /**---------------------------Fin--------------------------------- */
   };
 
   handleSubmit = (e) => {

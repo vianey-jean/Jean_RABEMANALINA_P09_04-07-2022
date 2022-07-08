@@ -13,7 +13,7 @@ export default class {
     if (buttonNewBill)
       buttonNewBill.addEventListener("click", this.handleClickNewBill);
     const iconEye = document.querySelectorAll(`div[data-testid="icon-eye"]`);
-    if (iconEye)
+    if (iconEye.length > 0)
       iconEye.forEach((icon) => {
         icon.addEventListener("click", () => this.handleClickIconEye(icon));
       });
@@ -44,10 +44,7 @@ export default class {
         .list()
         .then(snapshot => {
           const bills = snapshot
-            /*
-            *------------------bug 1 ---------------------------
-            * On trie dans l'ordre par date 
-            */
+            /* On trie dans l'ordre par date */
             .sort((a, b) => (a.date < b.date) ? 1 : -1)
             .map(doc => {
               try {
