@@ -7,8 +7,8 @@ import VerticalLayout from "../views/VerticalLayout"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 
 
-describe('Given I am connected as Employee', () => {
-  test("Then Icons should be rendered", () => {
+describe('Étant donné que je suis connecté en tant quemployé', () => {
+  test("Ensuite, les icônes doivent être rendues", () => {
     Object.defineProperty(window, 'localStorage', { value: localStorageMock })
     const user = JSON.stringify({
       type: 'Employee'
