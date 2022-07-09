@@ -5,9 +5,9 @@
 import { screen } from "@testing-library/dom"
 import LoadingPage from "../views/LoadingPage.js"
 
-describe('Given I am connected on app (as an Employee or an HR admin)', () => {
-  describe('When LoadingPage is called', () => {
-    test(('Then, it should render Loading...'), () => {
+describe('Étant donné que je suis connecté sur lapplication (en tant quemployé ou administrateur RH)', () => {
+  describe('Lorsque LoadingPage est appelée', () => {
+    test(('Ensuite, il devrait rendre Loading...'), () => {
       const html = LoadingPage()
       document.body.innerHTML = html
       expect(screen.getAllByText('Loading...')).toBeTruthy()
