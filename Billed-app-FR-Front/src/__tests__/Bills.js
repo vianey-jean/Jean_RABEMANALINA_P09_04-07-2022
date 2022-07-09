@@ -2,21 +2,21 @@
  * @jest-environment jsdom
  */
 
-import { screen, waitFor } from "@testing-library/dom";
-import BillsUI from "../views/BillsUI.js";
-import { bills } from "../fixtures/bills.js";
-import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
-import { localStorageMock } from "../__mocks__/localStorage.js";
-
-import router from "../app/Router.js";
-
 /**
  * Ajout Nouvelle Import pour les nouveaux tests
  */
-import userEvent from "@testing-library/user-event";
-import mockStore from "../__mocks__/store";
-import Bills from "../containers/Bills.js";
-jest.mock("../app/store", () => mockStore);
+
+ import { screen, waitFor } from "@testing-library/dom";
+ import userEvent from "@testing-library/user-event";
+ import BillsUI from "../views/BillsUI.js";
+ import { bills } from "../fixtures/bills.js";
+ import { ROUTES, ROUTES_PATH } from "../constants/routes.js";
+ import { localStorageMock } from "../__mocks__/localStorage.js";
+ import mockStore from "../__mocks__/store";
+ import Bills from "../containers/Bills.js";
+ import router from "../app/Router.js";
+ 
+ jest.mock("../app/store", () => mockStore);
 
 
 describe("Étant donné que je suis connecté en tant qu'employé", () => {
@@ -168,7 +168,7 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
         expect(message).toBeTruthy();
       });
 
-      test("récupère les messages d'une API et échoue avec une erreur de message 500", async () => {
+      test("fetches messages from an API and fails with 500 message error", async () => {
         mockStore.bills.mockImplementationOnce(() => {
           return {
             list: () => {
