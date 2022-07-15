@@ -22,15 +22,15 @@ const row = (bill) => {
 const rows = (data) => {
   return data && data.length
     ? data
-
-        //---------Bug 1----------------------
-        //------ajout de la méthode de tri-----
-        .sort((a, b) => (a.date < b.date) ? 1 : -1)
-
-        //-------------------------------------
-        //--------------------------------------
-        .map((bill) => row(bill))
-        .join("")
+      /* -------------------------------
+            *  On trie dans l'ordre par date 
+            *----------------------------------*/
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      /*-----------------------------------
+      *    Fin de correction Bug
+      *----------------------------------- */
+      .map((bill) => row(bill))
+      .join("")
     : "";
 };
 
