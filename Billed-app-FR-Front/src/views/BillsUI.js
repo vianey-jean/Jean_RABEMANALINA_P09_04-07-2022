@@ -22,7 +22,7 @@ const row = (bill) => {
 const rows = (data) => {
   return data && data.length
     ? data
-      /* -------------------------------
+      /* --------------Bug 1-----------------
             *  On trie dans l'ordre par date 
             *----------------------------------*/
       .sort((a, b) => new Date(b.date) - new Date(a.date))

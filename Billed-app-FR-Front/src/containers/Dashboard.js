@@ -151,7 +151,7 @@ export default class {
     }
 
     /**---------bug 4----------------------------------------------
-     * ajout lignes 179-180 si l'élément n'a pas de listener on l'ajoute
+     * ajout si l'élément n'a pas de listener on l'ajoute
      * ------------------------------------------------------------
      */
      bills.forEach((bill) => {

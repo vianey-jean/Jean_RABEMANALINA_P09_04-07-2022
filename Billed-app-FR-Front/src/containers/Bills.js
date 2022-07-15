@@ -44,7 +44,7 @@ export default class {
         .list()
         .then(snapshot => {
           const bills = snapshot
-            /* -------------------------------
+            /* ---------------Bug 1----------------
             *  On trie dans l'ordre par date 
             *----------------------------------*/
             .sort((a, b) => new Date(b.date) - new Date(a.date))
