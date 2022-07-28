@@ -22,7 +22,7 @@
 
 describe("Étant donné que je suis connecté en tant qu'employé", () => {
   describe("Quand je suis sur la page Factures", () => {
-    test("Then bill icon in vertical layout should be highlighted", async () => {
+    test("Ensuite, l'icône de la facture dans la disposition verticale doit être mise en surbrillance", async () => {
         /**
       * Véridication la présence d'une classe sur un élemément HTML
       **/
@@ -91,8 +91,8 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
      /**
       * Loadin test
       */
-      describe("When I am on the Bills page but it is loading", () => {
-        test(("Then the loading page should be rendered"), () => {
+      describe("Lorsque je suis sur la page Factures mais qu'elle est en cours de chargement", () => {
+        test(("Ensuite, la page de chargement devrait être rendue"), () => {
           // configure le body du document
           document.body.innerHTML = BillsUI({ loading: true })
   
@@ -104,8 +104,8 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
     /**
       * Erreur test
       */
-  describe("When I am on the Bills page and back-end send an error message", () => {
-    test(("Then the error page should be rendered"), () => {
+  describe("Lorsque je suis sur la page Factures et que le back-end envoie un message d'erreur", () => {
+    test(("Ensuite, la page d'erreur devrait être rendue"), () => {
       // configure le body du document
       document.body.innerHTML = BillsUI({ error: true})
 
@@ -121,7 +121,7 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
     /**
      * Bills test
      */
-    test('Then bills are shown if there are bills', () => {
+    test('Ensuite, les factures sont affichées il y a des factures', () => {
       // configure le body du document
       document.body.innerHTML = BillsUI({ data: bills })
 
@@ -165,7 +165,7 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
        /**
      * Modal test
      */
-     test(("Then I click on iconEye and a modal should be open"), () => {
+     test(("Ensuite, je clique sur iconEye et un modal devrait être ouvert"), () => {
       /**
       * On verifie que la modale s'ouvre lors du click sur l'icone "eye"
       **/
@@ -301,7 +301,7 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
       );
     });
 
-    test('if store, should display bills with right format date and status ', async () => {
+    test('si magasin, devrait afficher les factures avec la date et le statut du bon format ', async () => {
  
       const billsUIContainer = new Bills({
           document, onNavigate, store: mockStore, localStorage: window.localStorage
@@ -320,7 +320,7 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
        console.log(mockedBills[0].status)
      })
 
-     test('if store, if corrupted data was introduced, should log the error and return unformatted date in that case', async () => {
+     test('si le magasin, si des données corrompues ont été introduites, doit enregistrer erreur et renvoyer une date non formatée dans ce cas', async () => {
       const store = {
         bills() {
           return {
@@ -401,7 +401,7 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
         expect(message).toBeTruthy();
       });
 
-      test("fetches messages from an API and fails with 500 message error", async () => {
+      test("récupère les messages d'une API et échoue avec une erreur de message 500", async () => {
         mockStore.bills.mockImplementationOnce(() => {
           return {
             list: () => {

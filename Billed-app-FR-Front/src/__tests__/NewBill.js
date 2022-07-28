@@ -18,10 +18,10 @@ import userEvent from "@testing-library/user-event";
 jest.mock("../app/store", () => mockStore);
 
 
-describe("Given I am connected as an employee", () => {
+describe("Étant donné que je suis connecté en tant qu'employé", () => {
   // [UNIT TEST] - Icon mail highlighting (MM)
-  describe("When I am on NewBill Page", () => {
-    test("Then mail icon in vertical layout should be highlighted", async () => {
+  describe("Quand je suis sur la page NewBill", () => {
+    test("Ensuite, l'icône de courrier dans la disposition verticale doit être mise en surbrillance", async () => {
       Object.defineProperty(window, "localStorage", {
         value: localStorageMock,
       });
@@ -227,7 +227,7 @@ describe("Étant donné que je suis connecté en tant qu'employé sur la page Ne
     router();
   });
   
-  test("fetches newbills from mock API POST", async () => {
+  test("récupère les newbills à partir de l'API fictive POST", async () => {
     const onNavigate = (pathname) => {
       document.body.innerHTML = ROUTES({ pathname })
     }

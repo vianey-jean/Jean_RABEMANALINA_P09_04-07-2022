@@ -48,8 +48,8 @@ describe('Étant donné que je suis connecté en tant Admin', () => {
   })
 
   // [UNIT TEST] - Dahsboard display when there's no store ((MM)
-  describe("When I am on Dashboard Page and there is no store", () => {
-    test("Then no bills should be displayed", async () => {
+  describe("Lorsque je suis sur la page du tableau de bord et qu'il n'y a pas de magasin", () => {
+    test("Ensuite, aucune facture ne doit être affichée", async () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
       };
@@ -193,8 +193,8 @@ describe('Étant donné que je suis connecté en tant Admin', () => {
     })
   })
 
-  describe("When I am on Dashboard and there are no bills", () => {
-    test("Then, no cards should be shown", () => {
+  describe("Quand je suis sur Dashboard et qu'il n'y a pas de factures", () => {
+    test("Ensuite, aucune carte ne doit être montrée", () => {
       document.body.innerHTML = cards([]);
       const iconEdit = screen.queryByTestId("open-bill47qAXb6fIm2zOKkLzMro");
       expect(iconEdit).toBeNull();
