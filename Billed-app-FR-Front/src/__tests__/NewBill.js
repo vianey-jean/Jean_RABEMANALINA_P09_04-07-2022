@@ -12,16 +12,41 @@ import NewBill from "../containers/NewBill.js";
 import { ROUTES, ROUTES_PATH } from "../constants/routes";
 import { localStorageMock } from "../__mocks__/localStorage.js";
 import mockStore from "../__mocks__/store";
-import router from "../app/Router";
+import router from "../app/Router.js";
 import userEvent from "@testing-library/user-event";
 
 jest.mock("../app/store", () => mockStore);
 
-describe("Étant donné que je suis connecté en tant qu'employé", () => {
 
-  /**
-   * Ajout pour le test sur l'employée
-   */
+describe("Given I am connected as an employee", () => {
+  // [UNIT TEST] - Icon mail highlighting (MM)
+  describe("When I am on NewBill Page", () => {
+    test("Then mail icon in vertical layout should be highlighted", async () => {
+      Object.defineProperty(window, "localStorage", {
+        value: localStorageMock,
+      });
+      window.localStorage.setItem(
+        "user",
+        JSON.stringify({
+          type: "Employee",
+        })
+      );
+      const root = document.createElement("div");
+      root.setAttribute("id", "root");
+      document.body.append(root);
+      router();
+      window.onNavigate(ROUTES_PATH.NewBill);
+      await waitFor(() => screen.getByTestId("icon-mail"));
+      const windowMail = screen.getByTestId("icon-mail");
+      //Vérifie si icon-window existe
+      expect(windowMail).toBeTruthy();
+      //vérifie si il y a bein la class active-icon'
+      expect(windowMail.classList).toContain('active-icon');
+    });
+  });
+});
+
+describe("Étant donné que je suis connecté en tant qu'employé", () => {
 
   Object.defineProperty(window, "localStorage", {
     value: localStorageMock,
@@ -36,7 +61,7 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
   root.setAttribute("id", "root");
   document.body.append(root);
   router();
-
+    
   //Suite
   describe("Quand je suis sur la page NewBill", () => {
     test("Ensuite, l'icône de courrier dans la disposition verticale doit être mise en surbrillance", async () => {
@@ -104,10 +129,7 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
         "hidden"
       );
     });
-  });
-
-  describe("quand je télécharge un fichier avec le bon format", () => {
-    test("alors le fichier d'entrée doit afficher le nom du fichier", async () => {
+    test("alors il devrait retourner un message d'erreur", async () => {
       document.body.innerHTML = NewBillUI();
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
@@ -116,29 +138,72 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
       const newBill = new NewBill({
         document,
         onNavigate,
-        store: mockStore,
+        mockStore,
         localStorage: window.localStorage,
       });
 
-      const file = new File(["img"], "image.png", { type: "image/png" });
+      const file = new File(["hello"], "hello.pdf", { type: "document/pdf" });
       const inputFile = screen.getByTestId("file");
 
       const handleChangeFile = jest.fn((e) => newBill.handleChangeFile(e));
       inputFile.addEventListener("change", handleChangeFile);
 
-      userEvent.upload(inputFile, file);
+      fireEvent.change(inputFile, { target: { files: [file] } });
 
       expect(handleChangeFile).toHaveBeenCalled();
-      expect(inputFile.files[0]).toStrictEqual(file);
-      expect(inputFile.files[0].name).toBe("image.png");
-
+      expect(inputFile.files[0].type).toBe("document/pdf");
       await waitFor(() => screen.getByTestId("file-error-message"));
-      expect(screen.getByTestId("file-error-message").classList).toContain(
+      expect(screen.getByTestId("file-error-message").classList).not.toContain(
         "hidden"
       );
     });
   });
+
+  
+
+  describe("quand je télécharge un fichier avec le bon format", () => {
+     // Vérifie si un fichier est bien chargé
+     test("Vérifiez ensuite la facture du fichier", async() => {
+      jest.spyOn(mockStore, "bills")
+
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname })
+      }      
+
+      Object.defineProperty(window, "localStorage", { value: localStorageMock })
+      Object.defineProperty(window, "location", { value: { hash: ROUTES_PATH['NewBill']} })
+      window.localStorage.setItem("user", JSON.stringify({
+        type: "Employee"
+      }))
+
+      const html = NewBillUI()
+      document.body.innerHTML = html
+
+      const newBillInit = new NewBill({
+        document, onNavigate, store: mockStore, localStorage: window.localStorage
+      })
+
+      const file = new File(['image'], 'image.png', {type: 'image/png'});
+      const handleChangeFile = jest.fn((e) => newBillInit.handleChangeFile(e));
+      const formNewBill = screen.getByTestId("form-new-bill")
+      const billFile = screen.getByTestId('file');
+
+      billFile.addEventListener("change", handleChangeFile);     
+      userEvent.upload(billFile, file)
+      
+      expect(billFile.files[0].name).toBeDefined()
+      expect(handleChangeFile).toBeCalled()
+     
+      const handleSubmit = jest.fn((e) => newBillInit.handleSubmit(e));
+      formNewBill.addEventListener("submit", handleSubmit);     
+      fireEvent.submit(formNewBill);
+      expect(handleSubmit).toHaveBeenCalled();
+    })
+    
+  });
 });
+
+
 
 //test d'intégration POST
 
@@ -161,6 +226,61 @@ describe("Étant donné que je suis connecté en tant qu'employé sur la page Ne
     document.body.append(root);
     router();
   });
+  
+  test("fetches newbills from mock API POST", async () => {
+    const onNavigate = (pathname) => {
+      document.body.innerHTML = ROUTES({ pathname })
+    }
+    window.localStorage.setItem("user", JSON.stringify({ type: "Employee" }))
+
+    const newBill = new NewBill({ document, onNavigate, store: null, localStorage: window.localStorage})
+    document.body.innerHTMLl = NewBillUI()
+    
+    const inputData = {
+      type: 'Transports',
+      name: 'essai',
+      amount: '100',
+      date: '2021-03-29',
+      vat: '20',
+      pct: '20',
+      commentary: 'no',
+      fileURL: 'thisURL',
+      fileName: 'thisName',
+    }
+
+    const type = screen.getByTestId('expense-type')
+    userEvent.selectOptions(type, screen.getAllByText('Transports'))
+    expect(type.value).toBe(inputData.type)
+
+    const name = screen.getByTestId('expense-name')
+    fireEvent.change(name, {target: {value: inputData.name}})
+    expect(name.value).toBe(inputData.name)
+
+    const date = screen.getByTestId('datepicker')
+    fireEvent.change(date, { target: {value: inputData.date} })
+    expect(date.value).toBe(inputData.date)
+
+    const vat = screen.getByTestId('vat')
+    fireEvent.change(vat, { target: {value: inputData.vat} })
+    expect(vat.value).toBe(inputData.vat)
+
+    const pct = screen.getByTestId('pct')
+    fireEvent.change(pct, { target: {value: inputData.pct} })
+    expect(pct.value).toBe(inputData.pct)
+
+    const comment = screen.getByTestId('commentary')
+    fireEvent.change(comment, { target: { value: inputData.commentary } })
+    expect(comment.value).toBe(inputData.commentary)
+
+    const submitNewBill = screen.getByTestId('form-new-bill')
+    
+    const handleSubmit = jest.fn(newBill.handleSubmit)
+    submitNewBill.addEventListener('submit', handleSubmit)
+    fireEvent.submit(submitNewBill)
+    expect(handleSubmit).toHaveBeenCalled()
+    expect(screen.getAllByText('Mes notes de frais')).toBeTruthy()
+  })
+
 
   describe("quand APi fonctionne bien", () => {
     test("alors je devrais être envoyé sur la page des factures avec les factures mises à jour", async () => {
@@ -213,6 +333,7 @@ describe("Étant donné que je suis connecté en tant qu'employé sur la page Ne
 
         expect(console.error).toHaveBeenCalled();
       });
-    });
-  });
+    });  
+  }); 
 });
+

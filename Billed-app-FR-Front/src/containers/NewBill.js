@@ -46,6 +46,7 @@ export default class NewBill {
       file.type === "image/png"
     ) {
       errorMessage.classList.add("hidden");
+    
       /**
        * ----------------------------------------------------
        */
@@ -69,7 +70,9 @@ export default class NewBill {
        * -------------bug 3 --------------------
        * affichage message erreur si le fichier n'est pas au bon format
        */
-    } else {
+
+    } 
+    else {
       e.target.value = "";
       errorMessage.classList.remove("hidden");
     }

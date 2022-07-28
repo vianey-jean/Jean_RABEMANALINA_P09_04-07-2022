@@ -47,6 +47,29 @@ describe('Étant donné que je suis connecté en tant Admin', () => {
     })
   })
 
+  // [UNIT TEST] - Dahsboard display when there's no store ((MM)
+  describe("When I am on Dashboard Page and there is no store", () => {
+    test("Then no bills should be displayed", async () => {
+      const onNavigate = (pathname) => {
+        document.body.innerHTML = ROUTES({ pathname });
+      };
+      let bills = [];
+      const dashboard = new Dashboard({
+        document,
+        onNavigate,
+        store: null,
+        bills,
+        localStorage: window.localStorage,
+      });
+
+      const arrayBills = await dashboard.getBillsAllUsers();
+
+      document.body.innerHTML = DashboardUI({ data: arrayBills });
+      const bigIcon = screen.getByTestId("big-billed-icon");
+      expect(bigIcon).toBeTruthy();
+    });
+  });
+  
   describe('Quand je suis sur la page Tableau de bord et que je clique sur la flèche', () => {
     test('Ensuite, la liste des billets devrait se dérouler et les cartes devraient apparaître', async () => {
 
@@ -72,22 +95,40 @@ describe('Étant donné que je suis connecté en tant Admin', () => {
       const icon2 = screen.getByTestId('arrow-icon2')
       const icon3 = screen.getByTestId('arrow-icon3')
 
-      icon1.addEventListener('click', handleShowTickets1)
-      userEvent.click(icon1)
-      expect(handleShowTickets1).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`) )
-      expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy()
-      icon2.addEventListener('click', handleShowTickets2)
-      userEvent.click(icon2)
-      expect(handleShowTickets2).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`) )
-      expect(screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`)).toBeTruthy()
+      icon1.addEventListener("click", handleShowTickets1);
+      userEvent.click(icon1);
+      expect(handleShowTickets1).toHaveBeenCalled();
+      await waitFor(() => screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`));
+      expect(screen.getByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)).toBeTruthy();
+      // Expect click on arrow a second time hides bill (MM)
+      userEvent.click(icon1);
+      expect(
+        screen.queryByTestId(`open-bill47qAXb6fIm2zOKkLzMro`)
+      ).not.toBeTruthy();
+      //
 
-      icon3.addEventListener('click', handleShowTickets3)
-      userEvent.click(icon3)
-      expect(handleShowTickets3).toHaveBeenCalled()
-      await waitFor(() => screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`) )
-      expect(screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`)).toBeTruthy()
+      icon2.addEventListener("click", handleShowTickets2);
+      userEvent.click(icon2);
+      expect(handleShowTickets2).toHaveBeenCalled();
+      await waitFor(() => screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`));
+      expect(screen.getByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`)).toBeTruthy();
+      // Expect click on arrow a second time hides bill (MM)
+      userEvent.click(icon2);
+      expect(
+        screen.queryByTestId(`open-billUIUZtnPQvnbFnB0ozvJh`)
+      ).not.toBeTruthy();
+      //
+
+      icon3.addEventListener("click", handleShowTickets3);
+      userEvent.click(icon3);
+      expect(handleShowTickets3).toHaveBeenCalled();
+      await waitFor(() => screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`));
+      expect(screen.getByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`)).toBeTruthy();
+      // Expect click on arrow a second time hides bill (MM)
+      userEvent.click(icon3);
+      expect(
+        screen.queryByTestId(`open-billBeKy5Mo4jkmdfPGYpTxZ`)
+      ).not.toBeTruthy();
     })
   })
 
@@ -145,11 +186,20 @@ describe('Étant donné que je suis connecté en tant Admin', () => {
       const iconEdit = screen.getByTestId('open-bill47qAXb6fIm2zOKkLzMro')
       userEvent.click(iconEdit)
       userEvent.click(iconEdit)
-      const bigBilledIcon = screen.queryByTestId("big-billed-icon")
+      // Modification : queryByTestId => findByTestId
+      //const bigBilledIcon = screen.queryByTestId("big-billed-icon")
+      const bigBilledIcon = screen.findByTestId("big-billed-icon")
       expect(bigBilledIcon).toBeTruthy()
     })
   })
 
+  describe("When I am on Dashboard and there are no bills", () => {
+    test("Then, no cards should be shown", () => {
+      document.body.innerHTML = cards([]);
+      const iconEdit = screen.queryByTestId("open-bill47qAXb6fIm2zOKkLzMro");
+      expect(iconEdit).toBeNull();
+    });
+  });
 
   describe('Quand je suis sur Dashboard et il ny a pas de factures', () => {
     test('Ensuite, aucune carte ne doit être montrée', () => {
@@ -186,6 +236,7 @@ describe('Étant donné que je suis connecté en tant quadministrateur, que je s
       expect(bigBilledIcon).toBeTruthy()
     })
   })
+  
   describe('Quand je clique sur le bouton Refuser', () => {
     test('Je devrais être envoyé sur le tableau de bord avec une grande icône facturée au lieu du formulaire', () => {
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
@@ -257,6 +308,7 @@ describe("Étant donné que je suis un utilisateur connecté en tant qu'administ
       expect(contentRefused).toBeTruthy()
       expect(screen.getByTestId("big-billed-icon")).toBeTruthy()
     })
+
   describe("Lorsqu'une erreur se produit sur l'API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills")
@@ -274,6 +326,7 @@ describe("Étant donné que je suis un utilisateur connecté en tant qu'administ
       document.body.appendChild(root)
       router()
     })
+
     test("récupère les factures d'une API et échoue avec une erreur de message 404", async () => {
 
       mockStore.bills.mockImplementationOnce(() => {
@@ -303,7 +356,6 @@ describe("Étant donné que je suis un utilisateur connecté en tant qu'administ
       expect(message).toBeTruthy()
     })
   })
-
   })
 })
 
