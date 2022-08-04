@@ -216,15 +216,15 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
    })
  })
       
-  });
+});
 
   /**
    * -----ajout nouveaux tests --------------
    * -----------------------------------------
    */
   
-  describe("Quand je clique sur le bouton nouvelle facture", () => {
-    test("Ensuite, le nouveau projet de loi modal devrait s'ouvrir", () => {
+describe("Quand je clique sur le bouton nouvelle facture", () => {
+  test("Ensuite, le nouveau projet de loi modal devrait s'ouvrir", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
       };
@@ -243,11 +243,11 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
       expect(handleClickNewBill).toHaveBeenCalled();
       expect(screen.getAllByText("Envoyer une note de frais")).toBeTruthy();
       expect(screen.getByTestId("form-new-bill")).toBeTruthy();
-    });
   });
+});
 
-  describe("Quand je clique sur une icone oeil", () => {
-    test("Un modal devrait s'ouvrir avec une preuve de facture", () => {
+describe("Quand je clique sur une icone oeil", () => {
+  test("Un modal devrait s'ouvrir avec une preuve de facture", () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname });
       };
@@ -271,18 +271,18 @@ describe("Étant donné que je suis connecté en tant qu'employé", () => {
         userEvent.click(icon);
       });
 
-      expect(handleClickIconEye).toHaveBeenCalled();
-      expect(screen.getAllByText("Justificatif")).toBeTruthy();
-    });
+    expect(handleClickIconEye).toHaveBeenCalled();
+    expect(screen.getAllByText("Justificatif")).toBeTruthy();
   });
+});
 
 
 
 
 // test d'intégration GET (PM. requêtes HTTP onnées à envoyer au serveur sont écrites directement dans l’URL)
-describe("Etant donné que je suis un utilisateur connecté en tant que Salarié", () => {
-  describe("Lorsque j'accède à la page Factures", () => {
-    test("récupère les factures de l'API simulée GET", async () => {
+describe("Etant donné que je suis un utilisateur connecté en tant que Employée", () => {
+  describe("Lorsque j'accède à la page Notes de Frais", () => {
+    test("récupère les Notes de Frais de l'API simulée GET", async () => {
       // cf _mocks_ / localStorage.js : useur = Employee
       localStorage.setItem(
         "user",
@@ -318,9 +318,9 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
        expect(data[0].status).toEqual(formatStatus(mockedBills[0].status))
        console.log(data[0].status)
        console.log(mockedBills[0].status)
-     })
+    })
 
-     test('si le magasin, si des données corrompues ont été introduites, doit enregistrer erreur et renvoyer une date non formatée dans ce cas', async () => {
+    test('si le magasin, si des données corrompues ont été introduites, doit enregistrer erreur et renvoyer une date non formatée dans ce cas', async () => {
       const store = {
         bills() {
           return {
@@ -356,7 +356,7 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
       expect(data[0].date).toEqual('2004-04-x')
       console.log(data[0].date)
       expect(data[0].status).toEqual('En attente')
-     });
+    });
 
     
     describe("Lorsqu'une erreur se produit sur l'API", () => {
@@ -391,14 +391,14 @@ describe("Etant donné que je suis un utilisateur connecté en tant que Salarié
         mockStore.bills.mockImplementationOnce(() => {
           return {
             list: () => {
-              return Promise.reject(new Error("Erreur 404"));
+              return Promise.reject(new Error("Erreur 404"));//valeur dans la list il y a un erreur
             },
           };
         });
         window.onNavigate(ROUTES_PATH.Bills);
         await new Promise(process.nextTick);
         const message = await screen.getByText(/Erreur 404/);
-        expect(message).toBeTruthy();
+        expect(message).toBeTruthy();//Verification si le message erreur 404 est apparu ou pas
       });
 
       test("récupère les messages d'une API et échoue avec une erreur de message 500", async () => {
